@@ -18,9 +18,8 @@
       async function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
           center: { lat: 39.0997, lng: -94.5786 },
-          zoom: 10, 
-          mapId: 'YOUR_MAP_ID'
-
+          zoom: 10,
+          mapId: 'YOUR_MAP_ID' // 🔁 Replace with actual Map ID
         });
 
         try {
@@ -37,26 +36,21 @@
                 lng: parseFloat(location.lng),
               };
 
-              // Log marker position
-              console.log(`Placing marker ${index + 1}:`, position);
-
-              new google.maps.marker.AdvancedMarkerElement({
-                map,
-                position,
-                title: `${location.name} - ${location.item}`,
+              const marker = new google.maps.marker.AdvancedMarkerElement({
+                map: map,
+                position: position,
+                title: (location.name || '') + ' - ' + (location.item || ''),
               });
 
               bounds.extend(position);
               markerCount++;
-            } else {
-              console.warn(`Skipping location ${index + 1}: missing lat/lng`);
             }
           });
 
           if (markerCount > 0) {
             map.fitBounds(bounds);
           } else {
-            console.warn("No valid markers placed.");
+            console.warn("No valid markers found.");
           }
         } catch (error) {
           console.error("Error loading or parsing data.json:", error);

@@ -8,14 +8,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $handle = fopen($csvFile, 'r');
         $headers = fgetcsv($handle); // Read header
 
-        $locations = [];
+        $locations = array(); // ✅ PHP 5.3 compatible
 
         while (($data = fgetcsv($handle)) !== FALSE) {
             $row = array_combine($headers, $data);
-            
-            if (!isset($row['address']) || empty(trim($row['address']))) {
+
+            if (!isset($row['address']) || trim($row['address']) == '') {
                 continue; // Skip if address is missing or empty
             }
+
             $address = urlencode($row['address']);
 
             // Google Maps Geocoding API call
@@ -31,14 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $row['lng'] = null;
             }
 
-            $locations[] = $row;
+            $locations[] = $row; // ✅ PHP 5.3 compatible
             sleep(1); // Respect rate limits
         }
 
         fclose($handle);
         file_put_contents('data.json', json_encode($locations));
-        echo json_encode(['status' => 'success']);
+        echo json_encode(array('status' => 'success'));
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Upload failed']);
+        echo json_encode(array('status' => 'error', 'message' => 'Upload failed'));
     }
 }
