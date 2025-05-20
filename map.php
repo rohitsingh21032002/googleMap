@@ -1,3 +1,4 @@
+<?php include 'config.php'; ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -19,7 +20,7 @@
         map = new google.maps.Map(document.getElementById("map"), {
           center: { lat: 39.0997, lng: -94.5786 },
           zoom: 10,
-          mapId: 'YOUR_MAP_ID' // 🔁 Replace with actual Map ID
+          mapId:  "<?php echo MAP_ID; ?>" // 🔁 Replace with actual Map ID
         });
 
         try {
@@ -59,7 +60,7 @@
     </script>
 
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap&libraries=marker"
+      src="https://maps.googleapis.com/maps/api/js?key=<?php echo GOOGLE_API_KEY; ?>&callback=initMap&libraries=marker"
       async defer>
     </script>
   </body>

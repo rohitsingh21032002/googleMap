@@ -1,6 +1,6 @@
 <?php
-
-$apiKey = 'YOUR_API_KEY'; // Replace with your dev API key
+include 'config.php';
+$apiKey = GOOGLE_API_KEY; // Replace with your dev API key
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['csv']) && $_FILES['csv']['error'] === UPLOAD_ERR_OK) {
