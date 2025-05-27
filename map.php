@@ -1,11 +1,28 @@
-<?php include 'config.php'; ?>
+<?php include 'config.php';
+// If POST request with JSON data, save it to data.json
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $jsonData = file_get_contents('php://input');
+    // Validate JSON
+    $decoded = json_decode($jsonData);
+    if ($decoded !== null) {
+        file_put_contents('data.json', $jsonData);
+        header('Content-Type: application/json');
+        echo json_encode(array('status' => 'success', 'message' => 'Data saved'));
+        exit;
+    } else {
+        header("HTTP/1.1 400 Bad Request");
+        echo json_encode(array('status' => 'error', 'message' => 'Invalid JSON'));
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
   <head>
     <title>Google Maps with Advanced Markers</title>
     <style>
       #map {
-        height: 90vh;
+        height: 100vh;
         width: 100%;
       }
     </style>
@@ -19,8 +36,7 @@
       async function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
           center: { lat: 39.0997, lng: -94.5786 },
-          zoom: 10,
-          mapId:  "<?php echo MAP_ID; ?>" // 🔁 Replace with actual Map ID
+          zoom: 10
         });
 
         try {
@@ -37,7 +53,7 @@
                 lng: parseFloat(location.lng),
               };
 
-              const marker = new google.maps.marker.AdvancedMarkerElement({
+              const marker = new google.maps.Marker({
                 map: map,
                 position: position,
                 title: (location.name || '') + ' - ' + (location.item || ''),
